@@ -18,6 +18,9 @@ jobs:
           gem install xcpretty
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
+      - name: Create Build Directory
+        run: mkdir -p build
+
       - name: Build the App
         run: |
           xcodebuild clean archive \
