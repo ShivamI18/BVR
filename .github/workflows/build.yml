@@ -15,8 +15,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          brew install xcpretty
+          gem install xcpretty
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+
 
       - name: Build the App
         run: |
