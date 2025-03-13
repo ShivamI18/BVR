@@ -1,5 +1,4 @@
 name: Build IPA without Signing
-
 on: [push, pull_request]
 
 jobs:
