@@ -36,8 +36,11 @@ jobs:
             -exportPath build/IPA \
             CODE_SIGNING_ALLOWED=NO | xcpretty
 
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: BackgroundVideoRecorder.ipa
-          path: build/IPA
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+          -archivePath build/BackgroundVideoRecorder.xcarchive \
+          -exportOptionsPlist ExportOptions.plist \
+          -exportPath build/IPA \
+          CODE_SIGNING_ALLOWED=NO | tee build/export.log
+
