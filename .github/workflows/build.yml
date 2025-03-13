@@ -18,7 +18,6 @@ jobs:
           gem install xcpretty
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
-
       - name: Build the App
         run: |
           xcodebuild clean archive \
@@ -36,11 +35,10 @@ jobs:
             -exportPath build/IPA \
             CODE_SIGNING_ALLOWED=NO | xcpretty
 
-      - name: Export IPA
+      - name: Export IPA Log
         run: |
           xcodebuild -exportArchive \
           -archivePath build/BackgroundVideoRecorder.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
           -exportPath build/IPA \
           CODE_SIGNING_ALLOWED=NO | tee build/export.log
-
