@@ -19,8 +19,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          if ! command -v xcbeautify &> /dev/null; then
           brew install xcbeautify
+          fi
           pod install --project-directory=.
+
 
       - name: Build Unsigned IPA
         run: |
