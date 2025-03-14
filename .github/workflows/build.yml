@@ -1,12 +1,17 @@
-name: Build IPA without Signing
-on: [push, pull_request]
+name: Build Unsigned IPA
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Xcode
@@ -14,33 +19,32 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          gem install xcpretty
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+          brew install xcbeautify
+          pod install --project-directory=.
 
-      - name: Create Build Directory
-        run: mkdir -p build
-
-      - name: Build the App
+      - name: Build Unsigned IPA
         run: |
-          xcodebuild clean archive \
-            -scheme BackgroundVideoRecorder \
-            -archivePath build/BackgroundVideoRecorder.xcarchive \
+          xcodebuild -workspace BVR.xcworkspace \
+            -scheme BVR \
             -sdk iphoneos \
-            -destination "generic/platform=iOS" \
-            CODE_SIGNING_ALLOWED=NO | xcpretty
+            -configuration Release \
+            -archivePath build/BVR.xcarchive \
+            archive CODE_SIGNING_ALLOWED=NO
 
-      - name: Export IPA
-        run: |
           xcodebuild -exportArchive \
-            -archivePath build/BackgroundVideoRecorder.xcarchive \
+            -archivePath build/BVR.xcarchive \
+            -exportPath build \
             -exportOptionsPlist ExportOptions.plist \
-            -exportPath build/IPA \
-            CODE_SIGNING_ALLOWED=NO | xcpretty
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
 
-      - name: Export IPA Log
+      - name: Move IPA to Root IPA Folder
         run: |
-          xcodebuild -exportArchive \
-          -archivePath build/BackgroundVideoRecorder.xcarchive \
-          -exportOptionsPlist ExportOptions.plist \
-          -exportPath build/IPA \
-          CODE_SIGNING_ALLOWED=NO | tee build/export.log
+          mkdir -p ipa
+          mv build/*.ipa ipa/
+
+      - name: Upload IPA as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unsigned-IPA
+          path: ipa/*.ipa
