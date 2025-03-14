@@ -8,4 +8,4 @@ target 'BVR' do
 end
 
 # Add the path to your Xcode project
-project 'BVR/BackgroundVideoRecorder.xcodeproj/project.pbxproj'
+project 'BVR/BackgroundVideoRecorder.xcodeproj'
