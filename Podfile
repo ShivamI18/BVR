@@ -7,5 +7,4 @@ target 'BVR' do
   pod 'SwiftyJSON', '~> 5.0'
 end
 
-# Add the path to your Xcode project
 project 'BVR/BackgroundVideoRecorder.xcodeproj'
